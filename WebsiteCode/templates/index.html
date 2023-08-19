@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Attendance Verification</title>
+  <style>
+    body {
+  font-family: "Arial", sans-serif;
+  margin: 0;
+  padding: 20px;
+  background-color: #f8f8f8;
+}
+
+h1 {
+  text-align: center;
+  font-size: 30px; 
+  margin-bottom: 40px;
+  color: #333;
+  text-transform: uppercase;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  letter-spacing: 2px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+    form {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    
+    input[type="file"] {
+      display: none;
+    }
+    
+    .upload-btn,
+    .upload-button {
+      background-color: #4c75f2;
+      border: none;
+      color: white;
+      padding: 12px 24px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 18px;
+      margin-right: 10px;
+      cursor: pointer;
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      border-radius: 4px;
+      transition: background-color 0.3s ease;
+    }
+    
+    .upload-button {
+      background-color: #656565;
+    }
+    
+    .upload-btn:hover,
+    .upload-button:hover {
+      background-color: #3a64db;
+    }
+    
+    .upload-btn.highlighted,
+    .upload-button.highlighted {
+      background-color: #4461b1;
+    }
+    
+    hr {
+      margin: 30px 0;
+      border: none;
+      border-top: 1px solid #ccc;
+    }
+    
+    .error-message {
+      color: red;
+      text-align: center;
+      font-size: 16px;
+      margin-top: 10px;
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    }
+    
+    .image-container {
+      display: flex;
+      justify-content: center;
+    }
+    
+    .image-item img {
+      max-width: 50%;
+      height: auto;
+      border-radius: 4px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+  </style>
+  <script>
+    function highlightUploadButton(event) {
+      const fileInput = event.target;
+      const uploadButton = fileInput.nextElementSibling;
+      if (fileInput.files.length > 0) {
+        uploadButton.classList.add("highlighted");
+      } else {
+        uploadButton.classList.remove("highlighted");
+      }
+    }
+  </script>
+</head>
+<body>
+  <h1>Attendance Verification</h1>
+  
+  <form method="POST" enctype="multipart/form-data">
+    <label for="single_image" class="upload-btn">Choose Single Image</label>
+    <input type="file" name="single_image" id="single_image" accept="image/*" onchange="highlightUploadButton(event)">
+    <input type="submit" class="upload-button" value="Upload">
+  </form>
+  
+  <form method="POST" enctype="multipart/form-data">
+    <label for="bulk_images" class="upload-btn">Choose Bulk Images</label>
+    <input type="file" name="bulk_images[]" id="bulk_images" multiple accept="image/*" onchange="highlightUploadButton(event)">
+    <input type="submit" class="upload-button" value="Upload">
+  </form>
+  
+  <hr>
+  
+  <p class="error-message">{{ error_message }}</p>
+  
+  {% for img_path, count in images %}
+    <h2>Person Count: <span id="counter">{{ count }}</span></h2>
+    <div class="image-container">
+      <div class="image-item">
+        <img src="{{ img_path }}" alt="Processed Image">
+      </div>
+    </div>
+  {% endfor %}
+</body>
+</html>
